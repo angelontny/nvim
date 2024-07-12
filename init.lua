@@ -2,54 +2,45 @@
 
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-
 vim.g.have_nerd_font = true
 
-vim.opt.number = true
-vim.opt.relativenumber = true
+options = {
+  number = true,
+  relativenumber = true,
+  mouse = 'a',
+  showmode = false,
+  clipboard = 'unnamedplus',
+  breakindent = true,
+  undofile = true,
+  ignorecase = true,
+  smartcase = true,
+  signcolumn = 'yes',
+  updatetime = 250,
+  -- Decrease mapped sequence wait time,
+  -- Displays which-key popup sooner,
+  timeoutlen = 500,
+  -- Configure how new splits should be opened,
+  splitright = true,
+  splitbelow = false,
+  -- Sets how neovim will display certain whitespace characters in the editor.,
+  --  See `:help 'list'`,
+  --  and `:help 'listchars'`,
+  list = true,
+  listchars = { tab = '» ', trail = '·', nbsp = '␣' },
+  -- Preview substitutions live, as you type!,
+  inccommand = 'split',
+  -- Show which line your cursor is on,
+  cursorline = true,
+  -- Minimal number of screen lines to keep above and below the cursor.,
+  scrolloff = 10,
+  -- Set highlight on search, but clear on pressing <Esc> in normal mode,
+  hlsearch = true
+}
 
-vim.opt.mouse = 'a'
+for key, value in pairs(options) do
+  vim.opt[key] = value
+end
 
-vim.opt.showmode = false
-
-vim.opt.clipboard = 'unnamedplus'
-
-vim.opt.breakindent = true
-
-vim.opt.undofile = true
-
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
-vim.opt.signcolumn = 'yes'
-
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
--- Displays which-key popup sooner
-vim.opt.timeoutlen = 500
-
--- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = false
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
--- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
-
--- Show which line your cursor is on
-vim.opt.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
-
--- Set highlight on search, but clear on pressing <Esc> in normal mode
-vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Terminal Mode?
@@ -118,10 +109,8 @@ require("lazy").setup({
         }, { mode = 'v' })
       end,
     },
-    -- pretty icons
-    -- { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
 
-    -- Theme
+    { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
 
     {
       "folke/tokyonight.nvim",
@@ -138,7 +127,7 @@ require("lazy").setup({
 
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
+  install = { colorscheme = { "tokyonight-storm" } },
   -- automatically check for plugin updates
   checker = { enabled = true },
 })
