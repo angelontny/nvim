@@ -123,11 +123,14 @@ require("lazy").setup({
       "folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
-
-      opts = { transparent = true },
-      config = function(_, opts)
-        require("tokyonight").setup(opts)
-        vim.cmd.colorscheme("tokyonight-storm")
+      config = function(_)
+        hour = tonumber(os.date("%H"))
+        if hour >= 9 and hour <= 17 then
+          vim.cmd.colorscheme("tokyonight-day")
+        else
+          require("tokyonight").setup({transparent = true})
+          vim.cmd.colorscheme("tokyonight-storm")
+        end
       end,
     },
 },
