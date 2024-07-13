@@ -84,8 +84,8 @@ require("lazy").setup({
   spec = {
     -- add your plugins here
     'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-    'numToStr/Comment.nvim', -- gc to comment out selected lines
-    'lewis6991/gitsigns.nvim', -- gitsigns
+    { 'numToStr/Comment.nvim', opts = { } }, -- gc to comment out selected lines
+    { 'lewis6991/gitsigns.nvim', opts = { } }, -- gitsigns
 
     { -- Useful plugin to show you pending keybinds.
       'folke/which-key.nvim',
@@ -94,26 +94,28 @@ require("lazy").setup({
         require('which-key').setup()
 
         -- Document existing key chains
-        require('which-key').register {
-          { "<leader>c", group = "[C]ode" },
-          { "<leader>c_", hidden = true },
-          { "<leader>d", group = "[D]ocument" },
-          { "<leader>d_", hidden = true },
-          { "<leader>h", group = "Git [H]unk" },
-          { "<leader>h_", hidden = true },
-          { "<leader>r", group = "[R]ename" },
-          { "<leader>r_", hidden = true },
-          { "<leader>s", group = "[S]earch" },
-          { "<leader>s_", hidden = true },
-          { "<leader>t", group = "[T]oggle" },
-          { "<leader>t_", hidden = true },
-          { "<leader>w", group = "[W]orkspace" },
-          { "<leader>w_", hidden = true },
+        require('which-key').add {
+          { "", group = "[T]oggle" },
+          { "", group = "Git [H]unk" },
+          { "", desc = "<leader>d_", hidden = true },
+          { "", desc = "<leader>h_", hidden = true },
+          { "", desc = "<leader>r_", hidden = true },
+          { "", group = "[R]ename" },
+          { "", group = "[S]earch" },
+          { "", group = "[D]ocument" },
+          { "", group = "[C]ode" },
+          { "", desc = "<leader>t_", hidden = true },
+          { "", desc = "<leader>c_", hidden = true },
+          { "", group = "[W]orkspace" },
+          { "", desc = "<leader>w_", hidden = true },
+          { "", desc = "<leader>s_", hidden = true },
         }
         -- visual mode
-        require('which-key').register{
-          { "<leader>h", desc = "Git [H]unk", mode = "v" },
+        require('which-key').add {
+          { "", desc = "<leader>h", mode = "v" },
         }
+
+
       end,
     },
 
