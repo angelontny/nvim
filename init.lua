@@ -8,7 +8,7 @@ options = {
   number = true,
   relativenumber = true,
   mouse = 'a',
-  showmode = false,
+  showmode = true,
   clipboard = 'unnamedplus',
   breakindent = true,
   undofile = true,
@@ -31,6 +31,7 @@ options = {
   inccommand = 'split',
   -- Show which line your cursor is on,
   cursorline = true,
+  cursorlineopt = "screenline",
   -- Minimal number of screen lines to keep above and below the cursor.,
   scrolloff = 10,
   -- Set highlight on search, but clear on pressing <Esc> in normal mode,
@@ -91,10 +92,11 @@ require("lazy").setup({
       'folke/which-key.nvim',
       event = 'VimEnter', -- Sets the loading event to 'VimEnter'
       config = function() -- This is the function that runs, AFTER loading
-        require('which-key').setup()
+        local whichKey = require('which-key')
+        whichKey.setup()
 
         -- Document existing key chains
-        require('which-key').add {
+        whichKey.add {
           { "", group = "[T]oggle" },
           { "", group = "Git [H]unk" },
           { "", desc = "<leader>d_", hidden = true },
@@ -111,11 +113,9 @@ require("lazy").setup({
           { "", desc = "<leader>s_", hidden = true },
         }
         -- visual mode
-        require('which-key').add {
+        whichKey.add {
           { "", desc = "<leader>h", mode = "v" },
         }
-
-
       end,
     },
 
@@ -133,6 +133,29 @@ require("lazy").setup({
           require("tokyonight").setup({transparent = true})
           vim.cmd.colorscheme("tokyonight-storm")
         end
+      end,
+    },
+
+    -- Treesitter
+    { 'nvim-treesitter/nvim-treesitter',
+      build = ":TSUpdate",
+      config = function(_)
+        require('nvim-treesitter.configs').setup {
+          -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+          ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "nix", "cpp" }, -- "latex" requires treesitter-cli
+
+          -- Install parsers synchronously (only applied to `ensure_installed`)
+          sync_install = false,
+
+          -- Automatically install missing parsers when entering buffer
+          -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+          auto_install = false,
+
+          highlight = {
+            enable = true,
+            additional_vim_regex_highlighting = false,
+          },
+        }
       end,
     },
 },
