@@ -53,23 +53,8 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- Add keymap for miniFiles
-vim.keymap.set('n', '<leader>pv', function () return MiniFiles.open() end, { desc = 'Open MiniFiles' })
+vim.keymap.set('n', '<leader>pv', function () return MiniFiles.open(vim.api.nvim_buf_get_name(0), false) end, { desc = 'Open MiniFiles' })
 
--- Keymap for neoscroll
-local keymap = {
-  ["<C-u>"] = function() neoscroll.ctrl_u({ duration = 100; easing = 'circular' }) end;
-  ["<C-d>"] = function() neoscroll.ctrl_d({ duration = 100; easing = 'circular' }) end;
-
-  ["<C-b>"] = function() neoscroll.ctrl_b({ duration = 100; easing = 'circular' }) end;
-  ["<C-f>"] = function() neoscroll.ctrl_f({ duration = 100; easing = 'circular' }) end;
-
-  ["<C-y>"] = function() neoscroll.scroll(-0.1, { move_cursor=false; duration = 100 }) end;
-  ["<C-e>"] = function() neoscroll.scroll(0.1, { move_cursor=false; duration = 100 }) end;
-}
-local modes = { 'n', 'v', 'x' }
-for key, func in pairs(keymap) do
-    vim.keymap.set(modes, key, func)
-end
 
 -- Autocommand
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -156,7 +141,20 @@ require("lazy").setup({
     },
 
     -- Smooth scrolling
-    { "karb94/neoscroll.nvim", opts = {} },
+    {
+      "karb94/neoscroll.nvim",
+      opts = {
+        easing = 'quadratic',
+      },
+      config = function ()
+        -- Add keymap
+        local neoscroll = require 'neoscroll'
+        vim.keymap.set('n', '<leader>u', function() neoscroll.ctrl_u({ duration = 250, easing = 'circular'}) end, { desc = 'Scroll Up' })
+        vim.keymap.set('n', '<leader>d', function() neoscroll.ctrl_d({ duration = 250, easing = 'circular'}) end, { desc = 'Scroll Down' })
+        vim.keymap.set('n', '<leader>f', function() neoscroll.ctrl_f({ duration = 350, easing = 'circular'}) end, { desc = 'Scroll Backwards' })
+        vim.keymap.set('n', '<leader>b', function() neoscroll.ctrl_b({ duration = 350, easing = 'circular'}) end, { desc = 'Scroll Forwards' })
+      end,
+    },
 
     -- Treesitter
     { 'nvim-treesitter/nvim-treesitter',
@@ -206,5 +204,5 @@ require("lazy").setup({
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "tokyonight-storm" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+  checker = { enabled = false },
 })
