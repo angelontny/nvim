@@ -52,8 +52,24 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- Add keymap for mini
- vim.keymap.set('n', '<leader>pv', function () return MiniFiles.open() end, { desc = 'Open MiniFiles' })
+-- Add keymap for miniFiles
+vim.keymap.set('n', '<leader>pv', function () return MiniFiles.open() end, { desc = 'Open MiniFiles' })
+
+-- Keymap for neoscroll
+local keymap = {
+  ["<C-u>"] = function() neoscroll.ctrl_u({ duration = 100; easing = 'circular' }) end;
+  ["<C-d>"] = function() neoscroll.ctrl_d({ duration = 100; easing = 'circular' }) end;
+
+  ["<C-b>"] = function() neoscroll.ctrl_b({ duration = 100; easing = 'circular' }) end;
+  ["<C-f>"] = function() neoscroll.ctrl_f({ duration = 100; easing = 'circular' }) end;
+
+  ["<C-y>"] = function() neoscroll.scroll(-0.1, { move_cursor=false; duration = 100 }) end;
+  ["<C-e>"] = function() neoscroll.scroll(0.1, { move_cursor=false; duration = 100 }) end;
+}
+local modes = { 'n', 'v', 'x' }
+for key, func in pairs(keymap) do
+    vim.keymap.set(modes, key, func)
+end
 
 -- Autocommand
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -121,6 +137,7 @@ require("lazy").setup({
       end,
     },
 
+    -- Eye candy
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
 
     {
@@ -137,6 +154,9 @@ require("lazy").setup({
         end
       end,
     },
+
+    -- Smooth scrolling
+    { "karb94/neoscroll.nvim", opts = {} },
 
     -- Treesitter
     { 'nvim-treesitter/nvim-treesitter',
