@@ -31,7 +31,6 @@ options = {
   inccommand = 'split',
   -- Show which line your cursor is on,
   cursorline = true,
-  cursorlineopt = "screenline",
   -- Minimal number of screen lines to keep above and below the cursor.,
   scrolloff = 10,
   -- Set highlight on search, but clear on pressing <Esc> in normal mode,
@@ -52,6 +51,9 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Add keymap for mini
+ vim.keymap.set('n', '<leader>pv', function () return MiniFiles.open() end, { desc = 'Open MiniFiles' })
 
 -- Autocommand
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -131,7 +133,7 @@ require("lazy").setup({
           vim.cmd.colorscheme("tokyonight-day")
         else
           require("tokyonight").setup({transparent = true})
-          vim.cmd.colorscheme("tokyonight-storm")
+          vim.cmd.colorscheme("tokyonight-night")
         end
       end,
     },
@@ -156,6 +158,26 @@ require("lazy").setup({
             additional_vim_regex_highlighting = false,
           },
         }
+      end,
+    },
+
+    -- mini.nvim
+    { -- Collection of various small independent plugins/modules
+      'echasnovski/mini.nvim',
+      config = function()
+        ---@diagnostic disable-next-line: duplicate-set-field
+        local statusLine = require 'mini.statusline'
+        statusLine.setup({ })
+        statusLine.section_location = function()
+          return '%2l:%-2v'
+        end
+
+        require('mini.files').setup({
+          windows = {
+            preview = true,
+            width_preview = 80
+          }
+        })
       end,
     },
 },
