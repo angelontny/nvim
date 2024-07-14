@@ -4,7 +4,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
-options = {
+local options = {
   number = true,
   relativenumber = true,
   mouse = 'a',
@@ -117,7 +117,7 @@ require("lazy").setup({
         }
         -- visual mode
         whichKey.add {
-          { "", desc = "<leader>h", mode = "v" },
+          { "", desc = "<leader>h", mode = "v" }
         }
       end,
     },
@@ -126,20 +126,27 @@ require("lazy").setup({
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
 
     {
-      "folke/tokyonight.nvim",
-      lazy = false,
-      priority = 1000,
-      config = function(_)
-        hour = tonumber(os.date("%H"))
-        if hour >= 9 and hour <= 17 then
-          vim.cmd.colorscheme("tokyonight-day")
-        else
+      "folke/tokyonight.nvim", lazy = false, priority = 1000, config = function(_)
+        local hour = tonumber(os.date("%H"))
+        if hour >= 17 or hour < 8 then
           require("tokyonight").setup({transparent = true})
           vim.cmd.colorscheme("tokyonight-night")
         end
       end,
     },
 
+    {
+      "catppuccin/nvim",
+      name = "catppuccin",
+      priority = 1000,
+      config = function(_)
+        local hour = tonumber(os.date("%H"))
+        if hour >= 9 and hour < 17 then
+          require('catppuccin').setup({})
+          vim.cmd.colorscheme('catppuccin-latte')
+        end
+      end,
+    },
     -- Smooth scrolling
     {
       "karb94/neoscroll.nvim",
@@ -198,6 +205,19 @@ require("lazy").setup({
         })
       end,
     },
+
+    -- LSP configuration ( convenience was the priority here, but mason won't work on nixos )
+    -- Turns out, it takes a lot of time on nixos
+    -- {
+    --   "neovim/nvim-lspconfig",
+    --   config = function(_)
+    --     local lspconfig = require 'lspconfig'
+    --     lspconfig.java_language_server.setup({
+    --       cmd = { 'java-language-server' },
+    --       root_dir = function() return '.git' end 
+    --     })
+    --   end,
+    -- },
 },
 
   -- Configure any other settings here. See the documentation for more details.
