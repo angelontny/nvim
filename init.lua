@@ -128,7 +128,7 @@ require("lazy").setup({
     {
       "folke/tokyonight.nvim", lazy = false, priority = 1000, config = function(_)
         local hour = tonumber(os.date("%H"))
-        if hour >= 17 or hour < 8 then
+        if false then
           require("tokyonight").setup({transparent = true})
           vim.cmd.colorscheme("tokyonight-night")
         end
@@ -144,6 +144,9 @@ require("lazy").setup({
         if hour >= 9 and hour < 17 then
           require('catppuccin').setup({})
           vim.cmd.colorscheme('catppuccin-latte')
+        else
+          require('catppuccin').setup({transparent_background = true})
+          vim.cmd.colorscheme('catppuccin-mocha')
         end
       end,
     },
@@ -206,20 +209,100 @@ require("lazy").setup({
       end,
     },
 
+
+    -- Autocompletion capabilities
+    {
+      'hrsh7th/nvim-cmp',
+      setup = { }
+    },
+
+    -- LSP source for nvim-cmp
+    {
+      'hrsh7th/cmp-nvim-lsp',
+      setup = { }
+    },
+
+    -- Snippets source for nvim-cmp
+    {
+      'saadparwaiz1/cmp_luasnip',
+      setup = { }
+    },
+
+    -- Snippets plugin
+    {
+      'L3MON4D3/LuaSnip',
+      setup = { }
+    },
+
     --LSP configuration ( convenience was the priority here, but mason won't work on nixos )
     --Turns out, it takes a lot of time on nixos
     {
       "neovim/nvim-lspconfig",
       config = function(_)
-        local lspconfig = require 'lspconfig'
-        lspconfig.ltex.setup({})
+        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+        local lspconfig = require('lspconfig')
+
+        -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+        local servers = { 'ltex' }
+        for _, lsp in ipairs(servers) do
+          lspconfig[lsp].setup {
+            -- on_attach = my_custom_on_attach,
+            capabilities = capabilities,
+          }
+        end
+
+        -- luasnip setup
+        local luasnip = require 'luasnip'
+
+        -- nvim-cmp setup
+        local cmp = require 'cmp'
+        cmp.setup {
+          snippet = {
+            expand = function(args)
+              luasnip.lsp_expand(args.body)
+            end,
+          },
+          mapping = cmp.mapping.preset.insert({
+            ['<C-u>'] = cmp.mapping.scroll_docs(-4), -- Up
+            ['<C-d>'] = cmp.mapping.scroll_docs(4), -- Down
+            -- C-b (back) C-f (forward) for snippet placeholder navigation.
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<CR>'] = cmp.mapping.confirm {
+              behavior = cmp.ConfirmBehavior.Replace,
+              select = true,
+            },
+            ['<Tab>'] = cmp.mapping(function(fallback)
+              if cmp.visible() then
+                cmp.select_next_item()
+              elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+              else
+                fallback()
+              end
+            end, { 'i', 's' }),
+            ['<S-Tab>'] = cmp.mapping(function(fallback)
+              if cmp.visible() then
+                cmp.select_prev_item()
+              elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+              else
+                fallback()
+              end
+            end, { 'i', 's' }),
+          }),
+          sources = {
+            { name = 'nvim_lsp' },
+            { name = 'luasnip' },
+          },
+        }
       end,
     },
 },
 
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "tokyonight-storm" } },
+  install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
   checker = { enabled = false },
 })
