@@ -206,18 +206,15 @@ require("lazy").setup({
       end,
     },
 
-    -- LSP configuration ( convenience was the priority here, but mason won't work on nixos )
-    -- Turns out, it takes a lot of time on nixos
-    -- {
-    --   "neovim/nvim-lspconfig",
-    --   config = function(_)
-    --     local lspconfig = require 'lspconfig'
-    --     lspconfig.java_language_server.setup({
-    --       cmd = { 'java-language-server' },
-    --       root_dir = function() return '.git' end 
-    --     })
-    --   end,
-    -- },
+    --LSP configuration ( convenience was the priority here, but mason won't work on nixos )
+    --Turns out, it takes a lot of time on nixos
+    {
+      "neovim/nvim-lspconfig",
+      config = function(_)
+        local lspconfig = require 'lspconfig'
+        lspconfig.ltex.setup({})
+      end,
+    },
 },
 
   -- Configure any other settings here. See the documentation for more details.
