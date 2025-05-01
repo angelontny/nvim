@@ -578,6 +578,7 @@ require('lazy').setup({
             },
           },
         },
+        require('lspconfig').nil_ls.setup{}
       }
 
       -- Ensure the servers and tools above are installed
@@ -594,6 +595,7 @@ require('lazy').setup({
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       require'lspconfig'.pyright.setup{}
+      require'lspconfig'.clangd.setup{}
     end,
   },
 
